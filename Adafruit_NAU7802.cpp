@@ -110,12 +110,24 @@ bool Adafruit_NAU7802::enable(bool flag) {
   return pu_ready.read();
 }
 
+/**************************************************************************/
+/*!
+    @brief Whether there is new ADC data to read
+    @return True when there's new data available
+*/
+/**************************************************************************/
 bool Adafruit_NAU7802::available(void) {
   Adafruit_I2CRegisterBits conv_ready =
       Adafruit_I2CRegisterBits(_pu_ctrl_reg, 1, 5); // # bits, bit_shift
   return conv_ready.read();
 }
 
+/**************************************************************************/
+/*!
+    @brief Read the stored 24-bit ADC output value.
+    @return Signed integer with ADC output result, extended to a int32_t
+*/
+/**************************************************************************/
 int32_t Adafruit_NAU7802::read(void) {
   Adafruit_I2CRegister adc0 =
       Adafruit_I2CRegister(i2c_dev, NAU7802_ADCO_B2, 3, MSBFIRST);
@@ -128,6 +140,12 @@ int32_t Adafruit_NAU7802::read(void) {
   return val;
 }
 
+/**************************************************************************/
+/*!
+    @brief Perform a soft reset
+    @return False if there was any I2C comms error
+*/
+/**************************************************************************/
 bool Adafruit_NAU7802::reset(void) {
   Adafruit_I2CRegisterBits reg_reset =
       Adafruit_I2CRegisterBits(_pu_ctrl_reg, 1, 0); // # bits, bit_shift
@@ -238,7 +256,7 @@ NAU7802_Gain Adafruit_NAU7802::getGain(void) {
 /**************************************************************************/
 /*!
     @brief  The desired conversion rate setter
-    @param rate The desired rate: NAU7802_RATE_10SPS, NAU7802_RATE_20SPS, 
+    @param rate The desired rate: NAU7802_RATE_10SPS, NAU7802_RATE_20SPS,
     NAU7802_RATE_40SPS, NAU7802_RATE_80SPS, or NAU7802_RATE_320SPS
     @returns False if any I2C error occured
 */
@@ -254,7 +272,7 @@ bool Adafruit_NAU7802::setRate(NAU7802_SampleRate rate) {
 /**************************************************************************/
 /*!
     @brief  The desired conversion rate getter
-    @returns The rate: NAU7802_RATE_10SPS, NAU7802_RATE_20SPS, 
+    @returns The rate: NAU7802_RATE_10SPS, NAU7802_RATE_20SPS,
     NAU7802_RATE_40SPS, NAU7802_RATE_80SPS, or NAU7802_RATE_320SPS
 */
 /**************************************************************************/

@@ -40,6 +40,9 @@ Adafruit_NAU7802::Adafruit_NAU7802() {}
 */
 /**************************************************************************/
 bool Adafruit_NAU7802::begin(TwoWire *theWire) {
+  if (i2c_dev) {
+    delete i2c_dev;
+  }
   i2c_dev = new Adafruit_I2CDevice(NAU7802_I2CADDR_DEFAULT, theWire);
 
   /* Try to instantiate the I2C device. */

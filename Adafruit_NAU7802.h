@@ -14,10 +14,10 @@
 
 */
 /**************************************************************************/
-#include <Arduino.h>
-#include <Wire.h>
 #include <Adafruit_I2CDevice.h>
 #include <Adafruit_I2CRegister.h>
+#include <Arduino.h>
+#include <Wire.h>
 
 /** Default NAU7802 I2C address. */
 #define NAU7802_I2CADDR_DEFAULT 0x2A ///< I2C address
@@ -62,15 +62,13 @@ typedef enum _sample_rates {
   NAU7802_RATE_320SPS = 7,
 } NAU7802_SampleRate;
 
-
-
 /**************************************************************************/
 /*!
     @brief  NAU7802 driver.
 */
 /**************************************************************************/
 class Adafruit_NAU7802 {
- public:
+public:
   Adafruit_NAU7802();
   bool begin(TwoWire *theWire = &Wire);
   bool reset(void);
@@ -85,7 +83,7 @@ class Adafruit_NAU7802 {
   bool setRate(NAU7802_SampleRate gain);
   NAU7802_SampleRate getRate(void);
 
- private:
+private:
   Adafruit_I2CRegister *_pu_ctrl_reg = NULL;
   Adafruit_I2CDevice *i2c_dev = NULL;
 };

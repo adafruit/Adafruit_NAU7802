@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['setgain',['setGain',['../class_adafruit___n_a_u7802.html#a3016c18f9bcdd5a5f466eb97ec5ec572',1,'Adafruit_NAU7802']]],
-  ['setldo',['setLDO',['../class_adafruit___n_a_u7802.html#ab4dcb1b211fe46a751a8fc923cb97b9f',1,'Adafruit_NAU7802']]],
-  ['setrate',['setRate',['../class_adafruit___n_a_u7802.html#a495d8b6a65baa39488143d5f6403efc8',1,'Adafruit_NAU7802']]]
+  ['read',['read',['../class_adafruit___n_a_u7802.html#a102c8091dfcad61bb54d7d2e03f8367e',1,'Adafruit_NAU7802']]],
+  ['reset',['reset',['../class_adafruit___n_a_u7802.html#ae50baa3c7435e12133495d2bc912b2e9',1,'Adafruit_NAU7802']]]
 ];

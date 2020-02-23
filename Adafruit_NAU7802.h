@@ -21,12 +21,11 @@
 
 /** Default NAU7802 I2C address. */
 #define NAU7802_I2CADDR_DEFAULT 0x2A ///< I2C address
-#define NAU7802_PU_CTRL 0x00
-#define NAU7802_CTRL1 0x01
-#define NAU7802_CTRL2 0x02
-#define NAU7802_ADCO_B2 0x12
-#define NAU7802_ADC1_B2 0x12
-#define NAU7802_REVISION_ID 0x1F
+#define NAU7802_PU_CTRL 0x00 ///< Power control register
+#define NAU7802_CTRL1 0x01 ///< Control/config register #1
+#define NAU7802_CTRL2 0x02 ///< Control/config register #2
+#define NAU7802_ADCO_B2 0x12 ///< ADC ouput LSB
+#define NAU7802_REVISION_ID 0x1F  ///< Chip revision ID
 
 /*! The possible LDO voltages */
 typedef enum _ldovoltages {

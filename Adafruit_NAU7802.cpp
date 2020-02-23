@@ -72,6 +72,13 @@ bool Adafruit_NAU7802::begin(TwoWire *theWire) {
   return true;
 }
 
+/**************************************************************************/
+/*!
+    @brief  Whether to have the sensor enabled and working or in power down mode
+    @param  flag True to be in powered mode, False for power down mode
+    @return False if something went wrong with I2C comms
+*/
+/**************************************************************************/
 bool Adafruit_NAU7802::enable(bool flag) {
   Adafruit_I2CRegisterBits pu_analog =
       Adafruit_I2CRegisterBits(_pu_ctrl_reg, 1, 2); // # bits, bit_shift
@@ -144,6 +151,15 @@ bool Adafruit_NAU7802::reset(void) {
   return pu_ready.read();
 }
 
+/**************************************************************************/
+/*!
+    @brief  The desired LDO voltage setter
+    @param voltage The LDO setting: NAU7802_4V5, NAU7802_4V2, NAU7802_3V9,
+    NAU7802_3V6, NAU7802_3V3, NAU7802_3V0, NAU7802_2V7, NAU7802_2V4, or
+    NAU7802_EXTERNAL if we are not using the internal LDO
+    @return False if there was any I2C comms error
+*/
+/**************************************************************************/
 bool Adafruit_NAU7802::setLDO(NAU7802_LDOVoltage voltage) {
   Adafruit_I2CRegisterBits reg_avdds =
       Adafruit_I2CRegisterBits(_pu_ctrl_reg, 1, 7); // # bits, bit_shift
@@ -163,6 +179,14 @@ bool Adafruit_NAU7802::setLDO(NAU7802_LDOVoltage voltage) {
   return vldo.write(voltage);
 }
 
+/**************************************************************************/
+/*!
+    @brief  The desired LDO voltage getter
+    @returns The voltage setting: NAU7802_4V5, NAU7802_4V2, NAU7802_3V9,
+    NAU7802_3V6, NAU7802_3V3, NAU7802_3V0, NAU7802_2V7, NAU7802_2V4, or
+    NAU7802_EXTERNAL if we are not using the internal LDO
+*/
+/**************************************************************************/
 NAU7802_LDOVoltage Adafruit_NAU7802::getLDO(void) {
   Adafruit_I2CRegisterBits reg_avdds =
       Adafruit_I2CRegisterBits(_pu_ctrl_reg, 1, 7); // # bits, bit_shift
@@ -178,6 +202,15 @@ NAU7802_LDOVoltage Adafruit_NAU7802::getLDO(void) {
   return (NAU7802_LDOVoltage)vldo.read();
 }
 
+/**************************************************************************/
+/*!
+    @brief  The desired ADC gain setter
+    @param  gain Desired gain: NAU7802_GAIN_1, NAU7802_GAIN_2, NAU7802_GAIN_4,
+    NAU7802_GAIN_8, NAU7802_GAIN_16, NAU7802_GAIN_32, NAU7802_GAIN_64,
+    or NAU7802_GAIN_128
+    @returns False if there was any error during I2C comms
+*/
+/**************************************************************************/
 bool Adafruit_NAU7802::setGain(NAU7802_Gain gain) {
   Adafruit_I2CRegister ctrl1_reg = Adafruit_I2CRegister(i2c_dev, NAU7802_CTRL1);
   Adafruit_I2CRegisterBits gain_select =
@@ -186,6 +219,14 @@ bool Adafruit_NAU7802::setGain(NAU7802_Gain gain) {
   return gain_select.write(gain);
 }
 
+/**************************************************************************/
+/*!
+    @brief  The desired ADC gain getter
+    @returns The gain: NAU7802_GAIN_1, NAU7802_GAIN_2, NAU7802_GAIN_4,
+    NAU7802_GAIN_8, NAU7802_GAIN_16, NAU7802_GAIN_32, NAU7802_GAIN_64,
+    or NAU7802_GAIN_128
+*/
+/**************************************************************************/
 NAU7802_Gain Adafruit_NAU7802::getGain(void) {
   Adafruit_I2CRegister ctrl1_reg = Adafruit_I2CRegister(i2c_dev, NAU7802_CTRL1);
   Adafruit_I2CRegisterBits gain_select =
@@ -194,6 +235,14 @@ NAU7802_Gain Adafruit_NAU7802::getGain(void) {
   return gain_select.read();
 }
 
+/**************************************************************************/
+/*!
+    @brief  The desired conversion rate setter
+    @param rate The desired rate: NAU7802_RATE_10SPS, NAU7802_RATE_20SPS, 
+    NAU7802_RATE_40SPS, NAU7802_RATE_80SPS, or NAU7802_RATE_320SPS
+    @returns False if any I2C error occured
+*/
+/**************************************************************************/
 bool Adafruit_NAU7802::setRate(NAU7802_SampleRate rate) {
   Adafruit_I2CRegister ctrl2_reg = Adafruit_I2CRegister(i2c_dev, NAU7802_CTRL2);
   Adafruit_I2CRegisterBits rate_select =
@@ -202,6 +251,13 @@ bool Adafruit_NAU7802::setRate(NAU7802_SampleRate rate) {
   return rate_select.write(rate);
 }
 
+/**************************************************************************/
+/*!
+    @brief  The desired conversion rate getter
+    @returns The rate: NAU7802_RATE_10SPS, NAU7802_RATE_20SPS, 
+    NAU7802_RATE_40SPS, NAU7802_RATE_80SPS, or NAU7802_RATE_320SPS
+*/
+/**************************************************************************/
 NAU7802_SampleRate Adafruit_NAU7802::getRate(void) {
   Adafruit_I2CRegister ctrl2_reg = Adafruit_I2CRegister(i2c_dev, NAU7802_CTRL2);
   Adafruit_I2CRegisterBits rate_select =

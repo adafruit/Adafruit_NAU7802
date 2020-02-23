@@ -133,7 +133,7 @@ int32_t Adafruit_NAU7802::read(void) {
       Adafruit_I2CRegister(i2c_dev, NAU7802_ADCO_B2, 3, MSBFIRST);
   uint32_t val = adc0.read();
   // extend sign bit
-  if (val & 0x80000) {
+  if (val & 0x800000) {
     val |= 0xFF000000;
   }
 
@@ -250,7 +250,7 @@ NAU7802_Gain Adafruit_NAU7802::getGain(void) {
   Adafruit_I2CRegisterBits gain_select =
       Adafruit_I2CRegisterBits(&ctrl1_reg, 3, 0); // # bits, bit_shift
 
-  return gain_select.read();
+  return (NAU7802_Gain)gain_select.read();
 }
 
 /**************************************************************************/

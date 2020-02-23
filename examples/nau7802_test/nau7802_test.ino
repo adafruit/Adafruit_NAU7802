@@ -46,14 +46,30 @@ void setup() {
     case NAU7802_RATE_80SPS:  Serial.println("80 SPS"); break;
     case NAU7802_RATE_320SPS:  Serial.println("320 SPS"); break;
   }
+
+  // Take 10 readings to flush out readings
+  for (uint8_t i=0; i<10; i++) {
+    while (! nau.available()) delay(1);
+    nau.read();
+  }
+
+  while (! nau.calibrate(NAU7802_CALMOD_INTERNAL)) {
+    Serial.println("Failed to calibrate internal offset, retrying!");
+    delay(1000);
+  }
+  Serial.println("Calibrated internal offset");
+
+  while (! nau.calibrate(NAU7802_CALMOD_OFFSET)) {
+    Serial.println("Failed to calibrate system offset, retrying!");
+    delay(1000);
+  }
+  Serial.println("Calibrated system offset");
 }
 
 void loop() {
   while (! nau.available()) {
     delay(1);
   }
-  Serial.println("Ready!");
   int32_t val = nau.read();
   Serial.print("Read "); Serial.println(val);
-  delay(1000);
 }

@@ -25,6 +25,9 @@
 #define NAU7802_CTRL1 0x01           ///< Control/config register #1
 #define NAU7802_CTRL2 0x02           ///< Control/config register #2
 #define NAU7802_ADCO_B2 0x12         ///< ADC ouput LSB
+#define NAU7802_ADC 0x15             ///< ADC / chopper control
+#define NAU7802_PGA 0x1B             ///< PGA control
+#define NAU7802_POWER 0x1C           ///< power control
 #define NAU7802_REVISION_ID 0x1F     ///< Chip revision ID
 
 /*! The possible LDO voltages */
@@ -61,6 +64,13 @@ typedef enum _sample_rates {
   NAU7802_RATE_320SPS = 7,
 } NAU7802_SampleRate;
 
+/*! The possible calibration modes */
+typedef enum _calib_mode {
+  NAU7802_CALMOD_INTERNAL = 0,
+  NAU7802_CALMOD_OFFSET = 2,
+  NAU7802_CALMOD_GAIN = 3,
+} NAU7802_Calibration;
+
 /**************************************************************************/
 /*!
     @brief  NAU7802 driver.
@@ -81,6 +91,7 @@ public:
   NAU7802_Gain getGain(void);
   bool setRate(NAU7802_SampleRate gain);
   NAU7802_SampleRate getRate(void);
+  bool calibrate(NAU7802_Calibration mode);
 
 private:
   Adafruit_I2CRegister *_pu_ctrl_reg = NULL;

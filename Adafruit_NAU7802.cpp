@@ -63,13 +63,34 @@ bool Adafruit_NAU7802::begin(TwoWire *theWire) {
 
   if (!reset())
     return false;
+  if (!enable(true))
+    return false;
   if (!setLDO(NAU7802_3V0))
     return false;
   if (!setGain(NAU7802_GAIN_128))
     return false;
   if (!setRate(NAU7802_RATE_10SPS))
     return false;
-  if (!enable(true))
+
+  // disable ADC chopper clock
+  Adafruit_I2CRegister adc_reg = Adafruit_I2CRegister(i2c_dev, NAU7802_ADC);
+  Adafruit_I2CRegisterBits chop =
+      Adafruit_I2CRegisterBits(&adc_reg, 2, 4); // # bits, bit_shift
+  if (!chop.write(0x3))
+    return false;
+
+  // use low ESR caps
+  Adafruit_I2CRegister pga_reg = Adafruit_I2CRegister(i2c_dev, NAU7802_PGA);
+  Adafruit_I2CRegisterBits ldomode =
+      Adafruit_I2CRegisterBits(&pga_reg, 1, 6); // # bits, bit_shift
+  if (!ldomode.write(0))
+    return false;
+
+  // PGA stabilizer cap on output
+  Adafruit_I2CRegister pwr_reg = Adafruit_I2CRegister(i2c_dev, NAU7802_POWER);
+  Adafruit_I2CRegisterBits capen =
+      Adafruit_I2CRegisterBits(&pwr_reg, 1, 7); // # bits, bit_shift
+  if (!capen.write(1))
     return false;
 
   return true;
@@ -285,4 +306,32 @@ NAU7802_SampleRate Adafruit_NAU7802::getRate(void) {
       Adafruit_I2CRegisterBits(&ctrl2_reg, 3, 4); // # bits, bit_shift
 
   return (NAU7802_SampleRate)rate_select.read();
+}
+
+/**************************************************************************/
+/*!
+    @brief  Perform the internal calibration procedure
+    @param mode The calibration mode to perform: NAU7802_CALMOD_INTERNAL,
+    NAU7802_CALMOD_OFFSET or NAU7802_CALMOD_GAIN
+    @returns True on calibrations success
+*/
+/**************************************************************************/
+bool Adafruit_NAU7802::calibrate(NAU7802_Calibration mode) {
+  Adafruit_I2CRegister ctrl2_reg = Adafruit_I2CRegister(i2c_dev, NAU7802_CTRL2);
+  Adafruit_I2CRegisterBits cal_start =
+      Adafruit_I2CRegisterBits(&ctrl2_reg, 1, 2); // # bits, bit_shift
+  Adafruit_I2CRegisterBits cal_err =
+      Adafruit_I2CRegisterBits(&ctrl2_reg, 1, 3); // # bits, bit_shift
+  Adafruit_I2CRegisterBits cal_mod =
+      Adafruit_I2CRegisterBits(&ctrl2_reg, 2, 0); // # bits, bit_shift
+
+  if (!cal_mod.write(mode))
+    return false;
+  if (!cal_start.write(true))
+    return false;
+  while (!cal_start.read()) {
+    delay(10);
+  }
+
+  return !cal_err.read();
 }

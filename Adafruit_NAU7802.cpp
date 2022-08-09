@@ -263,6 +263,21 @@ bool Adafruit_NAU7802::setGain(NAU7802_Gain gain) {
 
 /**************************************************************************/
 /*!
+    @brief  The desired ADC input channel
+    @param  channel Desired channel: NAU7802_CHANNEL1, NAU7802_CHANNEL2
+    @returns False if there was any error during I2C comms
+*/
+/**************************************************************************/
+bool Adafruit_NAU7802::setChannel(NAU7802_Channel channel) {
+  Adafruit_I2CRegister ctrl2_reg = Adafruit_I2CRegister(i2c_dev, NAU7802_CTRL2);
+  Adafruit_I2CRegisterBits channel_select =
+      Adafruit_I2CRegisterBits(&ctrl2_reg, 1, 7); // # bits, bit_shift
+
+  return channel_select.write(channel);
+}
+
+/**************************************************************************/
+/*!
     @brief  The desired ADC gain getter
     @returns The gain: NAU7802_GAIN_1, NAU7802_GAIN_2, NAU7802_GAIN_4,
     NAU7802_GAIN_8, NAU7802_GAIN_16, NAU7802_GAIN_32, NAU7802_GAIN_64,

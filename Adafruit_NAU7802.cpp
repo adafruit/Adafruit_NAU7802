@@ -55,7 +55,7 @@ bool Adafruit_NAU7802::begin(TwoWire *theWire) {
       Adafruit_I2CRegister(i2c_dev, NAU7802_REVISION_ID);
 
   if ((rev_reg.read() & 0xF) != 0xF) {
-    return false;
+    //return false;
   }
 
   // define the main power control register
@@ -83,14 +83,14 @@ bool Adafruit_NAU7802::begin(TwoWire *theWire) {
   Adafruit_I2CRegister pga_reg = Adafruit_I2CRegister(i2c_dev, NAU7802_PGA);
   Adafruit_I2CRegisterBits ldomode =
       Adafruit_I2CRegisterBits(&pga_reg, 1, 6); // # bits, bit_shift
-  if (!ldomode.write(0))
+  if (!ldomode.write(1))
     return false;
 
   // PGA stabilizer cap on output
   Adafruit_I2CRegister pwr_reg = Adafruit_I2CRegister(i2c_dev, NAU7802_POWER);
   Adafruit_I2CRegisterBits capen =
       Adafruit_I2CRegisterBits(&pwr_reg, 1, 7); // # bits, bit_shift
-  if (!capen.write(1))
+  if (!capen.write(0))
     return false;
 
   return true;

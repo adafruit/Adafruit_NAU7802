@@ -80,13 +80,6 @@ void loop() {
     val1 = nau.read();
     //switch to channel 2
     nau.setChannel(NAU7802_CHANNEL2);
-    nau.calibrate(NAU7802_CALMOD_OFFSET);
-    nau.calibrate(NAU7802_CALMOD_GAIN);
-    //flush 5 readings (not mandatory)
-    /*for (uint8_t i=0; i<5; i++) {
-      while (! nau.available()) delay(1);
-      nau.read();
-    }*/
     channel1 = false;
   } else {
     //wait for available data on channel 2 & read
@@ -95,13 +88,6 @@ void loop() {
   
     //switch back to channel 1
     nau.setChannel(NAU7802_CHANNEL1);
-    nau.calibrate(NAU7802_CALMOD_OFFSET);
-    nau.calibrate(NAU7802_CALMOD_GAIN);
-    //flush 5 readings (not mandatory)
-    /*for (uint8_t i=0; i<5; i++) {
-      while (! nau.available()) delay(1);
-      nau.read();
-    }*/
     channel1 = true;
   }
   Serial.print("Read: "); Serial.print(val1); Serial.print(","); Serial.println(val2);

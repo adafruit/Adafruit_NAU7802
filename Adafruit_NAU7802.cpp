@@ -36,11 +36,10 @@ Adafruit_NAU7802::Adafruit_NAU7802() {}
     @brief  Sets up the I2C connection and tests that the sensor was found.
     @param theWire Pointer to an I2C device we'll use to communicate
     default is Wire
-    @param enableDualchannel If set to true, the PGA stabilizer capacitor is disabled and CH2 can be used
     @return true if sensor was found, otherwise false.
 */
 /**************************************************************************/
-bool Adafruit_NAU7802::begin(TwoWire *theWire = &Wire, bool enableDualchannel = false) {
+bool Adafruit_NAU7802::begin(TwoWire *theWire) {
   if (i2c_dev) {
     delete i2c_dev;
   }
@@ -79,17 +78,10 @@ bool Adafruit_NAU7802::begin(TwoWire *theWire = &Wire, bool enableDualchannel = 
   if (!ldomode.write(0))
     return false;
 
-  // PGA stabilizer cap on output; enabled in single channel, disabled in dual channel
-  Adafruit_I2CRegister pwr_reg = Adafruit_I2CRegister(i2c_dev, NAU7802_POWER);
-  Adafruit_I2CRegisterBits capen =
-      Adafruit_I2CRegisterBits(&pwr_reg, 1, 7); // # bits, bit_shift
-  if(enableDualchannel) {
-    if (!capen.write(0))
-      return false;
-  } else {
-    if (!capen.write(1))
-      return false;
-  }
+  // PGA stabilizer cap on output; enabled in single channel
+  if(!setPGACap(NAU7802_CAP_ON))
+    return false;
+
   return true;
 }
 
@@ -271,6 +263,21 @@ bool Adafruit_NAU7802::setChannel(NAU7802_Channel channel) {
       Adafruit_I2CRegisterBits(&ctrl2_reg, 1, 7); // # bits, bit_shift
 
   return channel_select.write(channel);
+}
+
+/**************************************************************************/
+/*!
+    @brief  En-/ Disable stabilization cap for PGA on channel 2 pins
+    @note Disabling the capacitor is necessary to use channel 2
+    @param  cap PGA stabilisation cap on / off
+    @returns False if there was any error during I2C comms
+*/
+/**************************************************************************/
+bool Adafruit_NAU7802::setPGACap(NAU7802_Cap cap) {
+  Adafruit_I2CRegister pwr_reg = Adafruit_I2CRegister(i2c_dev, NAU7802_POWER);
+  Adafruit_I2CRegisterBits capen =
+      Adafruit_I2CRegisterBits(&pwr_reg, 1, 7); // # bits, bit_shift
+  return capen.write(cap);
 }
 
 /**************************************************************************/

@@ -36,10 +36,11 @@ Adafruit_NAU7802::Adafruit_NAU7802() {}
     @brief  Sets up the I2C connection and tests that the sensor was found.
     @param theWire Pointer to an I2C device we'll use to communicate
     default is Wire
+    @param enableDualchannel If set to true, the PGA stabilizer capacitor is disabled and CH2 can be used
     @return true if sensor was found, otherwise false.
 */
 /**************************************************************************/
-bool Adafruit_NAU7802::begin(TwoWire *theWire) {
+bool Adafruit_NAU7802::begin(TwoWire *theWire = &Wire, bool enableDualchannel = false) {
   if (i2c_dev) {
     delete i2c_dev;
   }
@@ -48,14 +49,6 @@ bool Adafruit_NAU7802::begin(TwoWire *theWire) {
   /* Try to instantiate the I2C device. */
   if (!i2c_dev->begin()) {
     return false;
-  }
-
-  /* Check for NAU7802 revision register (0x1F), low nibble should be 0xF. */
-  Adafruit_I2CRegister rev_reg =
-      Adafruit_I2CRegister(i2c_dev, NAU7802_REVISION_ID);
-
-  if ((rev_reg.read() & 0xF) != 0xF) {
-    //return false;
   }
 
   // define the main power control register
@@ -83,16 +76,20 @@ bool Adafruit_NAU7802::begin(TwoWire *theWire) {
   Adafruit_I2CRegister pga_reg = Adafruit_I2CRegister(i2c_dev, NAU7802_PGA);
   Adafruit_I2CRegisterBits ldomode =
       Adafruit_I2CRegisterBits(&pga_reg, 1, 6); // # bits, bit_shift
-  if (!ldomode.write(1))
+  if (!ldomode.write(0))
     return false;
 
-  // PGA stabilizer cap on output
+  // PGA stabilizer cap on output; enabled in single channel, disabled in dual channel
   Adafruit_I2CRegister pwr_reg = Adafruit_I2CRegister(i2c_dev, NAU7802_POWER);
   Adafruit_I2CRegisterBits capen =
       Adafruit_I2CRegisterBits(&pwr_reg, 1, 7); // # bits, bit_shift
-  if (!capen.write(0))
-    return false;
-
+  if(enableDualchannel) {
+    if (!capen.write(0))
+      return false;
+  } else {
+    if (!capen.write(1))
+      return false;
+  }
   return true;
 }
 

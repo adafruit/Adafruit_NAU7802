@@ -85,7 +85,7 @@ typedef enum _channel {
 class Adafruit_NAU7802 {
 public:
   Adafruit_NAU7802();
-  bool begin(TwoWire *theWire = &Wire);
+  bool begin(TwoWire *theWire = &Wire, bool enableDualchannel = false);
   bool reset(void);
   bool enable(bool flag);
   bool available(void);

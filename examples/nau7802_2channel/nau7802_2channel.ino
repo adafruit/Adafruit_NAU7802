@@ -12,8 +12,9 @@ void setup() {
     Serial.println("Failed to find NAU7802");
     delay(1000);
   }
-  Serial.println("Found NAU7802");
-
+  Serial.println("Found NAU7802, disabling PGA cap for 2 channel operation");
+  nau.setPGACap(NAU7802_CAP_OFF);
+  
   nau.setLDO(NAU7802_2V7);
   Serial.print("LDO voltage set to ");
   switch (nau.getLDO()) {

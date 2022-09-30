@@ -79,7 +79,7 @@ bool Adafruit_NAU7802::begin(TwoWire *theWire) {
     return false;
 
   // PGA stabilizer cap on output; enabled in single channel
-  if(!setPGACap(NAU7802_CAP_ON))
+  if (!setPGACap(NAU7802_CAP_ON))
     return false;
 
   return true;

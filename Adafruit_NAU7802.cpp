@@ -50,6 +50,14 @@ bool Adafruit_NAU7802::begin(TwoWire *theWire) {
     return false;
   }
 
+  // define the main power control register
+  _pu_ctrl_reg = new Adafruit_I2CRegister(i2c_dev, NAU7802_PU_CTRL);
+
+  if (!reset())
+    return false;
+  if (!enable(true))
+    return false;
+
   /* Check for NAU7802 revision register (0x1F), low nibble should be 0xF. */
   Adafruit_I2CRegister rev_reg =
       Adafruit_I2CRegister(i2c_dev, NAU7802_REVISION_ID);
@@ -58,13 +66,6 @@ bool Adafruit_NAU7802::begin(TwoWire *theWire) {
     return false;
   }
 
-  // define the main power control register
-  _pu_ctrl_reg = new Adafruit_I2CRegister(i2c_dev, NAU7802_PU_CTRL);
-
-  if (!reset())
-    return false;
-  if (!enable(true))
-    return false;
   if (!setLDO(NAU7802_3V0))
     return false;
   if (!setGain(NAU7802_GAIN_128))

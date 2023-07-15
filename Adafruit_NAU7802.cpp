@@ -50,10 +50,11 @@ bool Adafruit_NAU7802::begin(TwoWire *theWire) {
 
   // define the main power control register 
   _pu_ctrl_reg = new Adafruit_I2CRegister(i2c_dev, NAU7802_PU_CTRL);
-
-  if (!ok)
+  
+  if (!ok) {
     return false;
-
+  }
+  
   if (!reset())
     return false;
   if (!enable(true))

@@ -46,12 +46,13 @@ bool Adafruit_NAU7802::begin(TwoWire *theWire) {
   i2c_dev = new Adafruit_I2CDevice(NAU7802_I2CADDR_DEFAULT, theWire);
 
   /* Try to instantiate the I2C device. */
-  if (!i2c_dev->begin()) {
-    return false;
-  }
+  bool ok = i2c_dev->begin();
 
-  // define the main power control register
+  // define the main power control register 
   _pu_ctrl_reg = new Adafruit_I2CRegister(i2c_dev, NAU7802_PU_CTRL);
+
+  if (!ok)
+    return false;
 
   if (!reset())
     return false;

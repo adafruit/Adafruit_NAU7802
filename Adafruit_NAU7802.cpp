@@ -196,6 +196,59 @@ bool Adafruit_NAU7802::reset(void) {
 
 /**************************************************************************/
 /*!
+    @brief  The desired PGA input
+    @param  The input: NAU7802_INPUT_CH1, NAU7802_INPUT_CH2,
+    NAU7802_INPUT_TS
+    @return False if there was any I2C comms error
+*/
+/**************************************************************************/
+bool Adafruit_NAU7802::setInput(NAU7802_PGAInput input) {
+  Adafruit_I2CRegister ctrl2_reg = Adafruit_I2CRegister(i2c_dev, NAU7802_CTRL2);
+  Adafruit_I2CRegisterBits chs =
+      Adafruit_I2CRegisterBits(&ctrl2_reg, 1, 7); // # bits, bit_shift
+
+  Adafruit_I2CRegister i2c_ctrl_reg =
+      Adafruit_I2CRegister(i2c_dev, NAU7802_I2C_CTRL);
+  Adafruit_I2CRegisterBits ts =
+      Adafruit_I2CRegisterBits(&i2c_ctrl_reg, 1, 1); // # bits, bit_shift
+
+  // temperature
+  if (input == NAU7802_INPUT_TS)
+    return ts.write(1);
+
+  // clear ts bit if set
+  if (ts.read() && !ts.write(0))
+    return false;
+
+  // channel 1 & 2
+  return chs.write(input);
+}
+
+/**************************************************************************/
+/*!
+    @brief  The desired PGA input
+    @return The configured input: NAU7802_INPUT_CH1, NAU7802_INPUT_CH2,
+    NAU7802_INPUT_TS
+*/
+/**************************************************************************/
+NAU7802_PGAInput Adafruit_NAU7802::getInput(void) {
+  Adafruit_I2CRegister i2c_ctrl_reg =
+      Adafruit_I2CRegister(i2c_dev, NAU7802_I2C_CTRL);
+  Adafruit_I2CRegisterBits ts =
+      Adafruit_I2CRegisterBits(&i2c_ctrl_reg, 1, 1); // # bits, bit_shift
+
+  if (ts.read())
+    return NAU7802_INPUT_TS;
+
+  Adafruit_I2CRegister ctrl2_reg = Adafruit_I2CRegister(i2c_dev, NAU7802_CTRL2);
+  Adafruit_I2CRegisterBits chs =
+      Adafruit_I2CRegisterBits(&ctrl2_reg, 1, 7); // # bits, bit_shift
+
+  return (NAU7802_PGAInput)chs.read();
+}
+
+/**************************************************************************/
+/*!
     @brief  The desired LDO voltage setter
     @param voltage The LDO setting: NAU7802_4V5, NAU7802_4V2, NAU7802_3V9,
     NAU7802_3V6, NAU7802_3V3, NAU7802_3V0, NAU7802_2V7, NAU7802_2V4, or

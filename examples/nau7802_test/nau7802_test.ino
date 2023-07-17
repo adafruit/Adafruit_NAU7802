@@ -10,6 +10,14 @@ void setup() {
   }
   Serial.println("Found NAU7802");
 
+  nau.setInput(NAU7802_INPUT_CH1);
+  Serial.print("Input channel set to ");
+  switch (nau.getInput()) {
+    case NAU7802_INPUT_CH1: Serial.println("channel 1"); break;
+    case NAU7802_INPUT_CH2: Serial.println("channel 2"); break;
+    case NAU7802_INPUT_TS:  Serial.println("temperature sensor"); break;
+  }
+
   nau.setLDO(NAU7802_3V0);
   Serial.print("LDO voltage set to ");
   switch (nau.getLDO()) {

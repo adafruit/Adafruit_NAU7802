@@ -24,6 +24,7 @@
 #define NAU7802_PU_CTRL 0x00         ///< Power control register
 #define NAU7802_CTRL1 0x01           ///< Control/config register #1
 #define NAU7802_CTRL2 0x02           ///< Control/config register #2
+#define NAU7802_I2C_CTRL 0x11        ///< I2C control register
 #define NAU7802_ADCO_B2 0x12         ///< ADC ouput LSB
 #define NAU7802_ADC 0x15             ///< ADC / chopper control
 #define NAU7802_PGA 0x1B             ///< PGA control
@@ -71,6 +72,13 @@ typedef enum _calib_mode {
   NAU7802_CALMOD_GAIN = 3,
 } NAU7802_Calibration;
 
+/*! The possible PGA inputs */
+typedef enum _pgainputs {
+  NAU7802_INPUT_CH1 = 0,
+  NAU7802_INPUT_CH2 = 1,
+  NAU7802_INPUT_TS = 2,
+} NAU7802_PGAInput;
+
 /**************************************************************************/
 /*!
     @brief  NAU7802 driver.
@@ -85,6 +93,8 @@ public:
   bool available(void);
   int32_t read(void);
 
+  bool setInput(NAU7802_PGAInput input);
+  NAU7802_PGAInput getInput(void);
   bool setLDO(NAU7802_LDOVoltage voltage);
   NAU7802_LDOVoltage getLDO(void);
   bool setGain(NAU7802_Gain gain);

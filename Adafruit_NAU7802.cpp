@@ -196,8 +196,8 @@ bool Adafruit_NAU7802::reset(void) {
 
 /**************************************************************************/
 /*!
-    @brief  The desired PGA input
-    @param  The input: NAU7802_INPUT_CH1, NAU7802_INPUT_CH2,
+    @brief The desired PGA input
+    @param input The selected input: NAU7802_INPUT_CH1, NAU7802_INPUT_CH2,
     NAU7802_INPUT_TS
     @return False if there was any I2C comms error
 */
@@ -226,8 +226,8 @@ bool Adafruit_NAU7802::setInput(NAU7802_PGAInput input) {
 
 /**************************************************************************/
 /*!
-    @brief  The desired PGA input
-    @return The configured input: NAU7802_INPUT_CH1, NAU7802_INPUT_CH2,
+    @brief The desired PGA input
+    @returns The configured input: NAU7802_INPUT_CH1, NAU7802_INPUT_CH2,
     NAU7802_INPUT_TS
 */
 /**************************************************************************/

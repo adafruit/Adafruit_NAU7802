@@ -7,6 +7,7 @@ void setup() {
   Serial.println("NAU7802");
   if (! nau.begin()) {
     Serial.println("Failed to find NAU7802");
+    while (1) delay(10);  // Don't proceed.
   }
   Serial.println("Found NAU7802");
 

@@ -149,6 +149,24 @@ bool Adafruit_NAU7802::available(void) {
 
 /**************************************************************************/
 /*!
+    @brief  Set which channel for ADC
+    @param channel Set to 0 for CH1, 1 for CH2
+    @returns False if any I2C error occured
+*/
+/**************************************************************************/
+bool Adafruit_NAU7802::setChannel(uint8_t channel) {
+  if (channel > 1)
+    channel = 1;
+
+  Adafruit_I2CRegister ctrl2_reg = Adafruit_I2CRegister(i2c_dev, NAU7802_CTRL2);
+  Adafruit_I2CRegisterBits ch_select =
+      Adafruit_I2CRegisterBits(&ctrl2_reg, 1, 7); // # bits, bit_shift
+
+  return ch_select.write(channel);
+}
+
+/**************************************************************************/
+/*!
     @brief Read the stored 24-bit ADC output value.
     @return Signed integer with ADC output result, extended to a int32_t
 */

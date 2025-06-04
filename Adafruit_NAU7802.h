@@ -85,6 +85,7 @@ public:
   bool available(void);
   int32_t read(void);
 
+  bool setChannel(uint8_t channel);
   bool setLDO(NAU7802_LDOVoltage voltage);
   NAU7802_LDOVoltage getLDO(void);
   bool setGain(NAU7802_Gain gain);

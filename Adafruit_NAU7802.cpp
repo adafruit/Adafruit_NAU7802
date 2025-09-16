@@ -87,13 +87,6 @@ bool Adafruit_NAU7802::begin(TwoWire *theWire) {
   if (!ldomode.write(0))
     return false;
 
-  // PGA stabilizer cap on output
-  Adafruit_I2CRegister pwr_reg = Adafruit_I2CRegister(i2c_dev, NAU7802_POWER);
-  Adafruit_I2CRegisterBits capen =
-      Adafruit_I2CRegisterBits(&pwr_reg, 1, 7); // # bits, bit_shift
-  if (!capen.write(1))
-    return false;
-
   return true;
 }
 
@@ -325,6 +318,23 @@ NAU7802_SampleRate Adafruit_NAU7802::getRate(void) {
       Adafruit_I2CRegisterBits(&ctrl2_reg, 3, 4); // # bits, bit_shift
 
   return (NAU7802_SampleRate)rate_select.read();
+}
+
+/**************************************************************************/
+/*!
+    @brief  Enable or disable optional PGA filters. NOTE - this should only
+    be used for single channel operation.
+    @param enable Use true to enable or false to disable.
+    @returns False if any I2C error occured
+*/
+/**************************************************************************/
+bool Adafruit_NAU7802::setPGACap(bool enable) {
+  Adafruit_I2CRegister pwr_reg = Adafruit_I2CRegister(i2c_dev, NAU7802_POWER);
+  Adafruit_I2CRegisterBits capen =
+      Adafruit_I2CRegisterBits(&pwr_reg, 1, 7); // # bits, bit_shift
+  if (!capen.write(enable ? 1 : 0))
+    return false;
+  return true;
 }
 
 /**************************************************************************/

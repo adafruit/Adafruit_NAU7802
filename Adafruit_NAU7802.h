@@ -92,6 +92,7 @@ public:
   NAU7802_Gain getGain(void);
   bool setRate(NAU7802_SampleRate gain);
   NAU7802_SampleRate getRate(void);
+  bool setPGACap(bool enable);
   bool calibrate(NAU7802_Calibration mode);
 
 private:

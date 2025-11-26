@@ -345,7 +345,7 @@ bool Adafruit_NAU7802::setPGACap(bool enable) {
 */
 /**************************************************************************/
 bool Adafruit_NAU7802::setPGABypass(bool enable) {
-  Adafruit_I2CRegister bypass_reg = Adafruit_I2CRegister(i2c_dev, NAU7802_PGA_REG);
+  Adafruit_I2CRegister bypass_reg = Adafruit_I2CRegister(i2c_dev, NAU7802_PGA);
   Adafruit_I2CRegisterBits bypass_set =
       Adafruit_I2CRegisterBits(&bypass_reg, 1, 4); // # bits, bit_shift
   if (!bypass_set.write(enable ? 1 : 0))

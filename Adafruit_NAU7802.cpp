@@ -130,6 +130,18 @@ bool Adafruit_NAU7802::enable(bool flag) {
 
 /**************************************************************************/
 /*!
+    @brief  Checks if the sensor is connected and responsive
+    @return True if the sensor was detected on the I2C bus
+*/
+/**************************************************************************/
+bool Adafruit_NAU7802::isConnected(void) {
+  if (!i2c_dev)
+    return false;
+  return i2c_dev->detected();
+}
+
+/**************************************************************************/
+/*!
     @brief Whether there is new ADC data to read
     @return True when there's new data available
 */

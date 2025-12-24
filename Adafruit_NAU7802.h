@@ -82,6 +82,7 @@ public:
   bool begin(TwoWire *theWire = &Wire);
   bool reset(void);
   bool enable(bool flag);
+  bool isConnected(void);
   bool available(void);
   int32_t read(void);
 
